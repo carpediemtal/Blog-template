@@ -14,6 +14,7 @@ import javafx.scene.paint.Paint;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -31,22 +32,28 @@ public class Main extends Application {
         HBox hBox3 = new HBox(10);
         vBox.getChildren().addAll(hBox1, hBox2, hBox3);
 
-        // HBox-1
+        /*  HBox-1  */
         Label nameLabel = new Label("File Name:");
         TextField nameTextField = new TextField("LeetCode");
         nameTextField.setMinWidth(250);
+        nameLabel.getStyleClass().add("text-primary");
 
-        // HBox-2
+        /*  HBox-2  */
         Label pathLabel = new Label("Path:");
+        pathLabel.getStyleClass().add("text-primary");
         TextField pathTextField = new TextField("C:\\Users\\67460\\Documents\\blog\\source\\_posts");
         pathTextField.setMinWidth(250);
         Button browseButton = new Button("Browse");
         browseButton.setOnAction(actionEvent -> pathTextField.setText(chooseDirectory(primaryStage).toString()));
+        browseButton.getStyleClass().addAll("btn", "btn-outline-primary");
 
-        // HBox-3
+        /*  HBox-3  */
         Label infoLabel = new Label();
         // Set red color for info label
         infoLabel.setTextFill(Paint.valueOf("#FF0000"));
+        infoLabel.getStyleClass().addAll("lbl", "lbl-warning");
+        infoLabel.setVisible(false);
+
         Button executeButton = new Button("Execute");
         executeButton.setOnAction(actionEvent -> {
             try {
@@ -57,14 +64,31 @@ public class Main extends Application {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            }finally {
+                infoLabel.setVisible(true);
             }
         });
+        executeButton.getStyleClass().addAll("btn", "btn-primary");
+        Button openPathButton = new Button("Open");
+        openPathButton.setOnAction(actionEvent -> {
+            try {
+                Desktop.getDesktop().open(new File("C:\\Users\\67460\\Documents\\blog\\source\\_posts"));
+                infoLabel.setText("Open path, done!");
+            } catch (IOException e) {
+                infoLabel.setText("Open path failed");
+                e.printStackTrace();
+            }finally {
+                infoLabel.setVisible(true);
+            }
+        });
+        openPathButton.getStyleClass().setAll("btn", "btn-info");
         Button cancelButton = new Button("Cancel");
         cancelButton.setOnAction(actionEvent -> primaryStage.close());
+        cancelButton.getStyleClass().setAll("btn", "btn-danger");
 
         hBox1.getChildren().addAll(nameLabel, nameTextField);
         hBox2.getChildren().addAll(pathLabel, pathTextField, browseButton);
-        hBox3.getChildren().addAll(infoLabel, executeButton, cancelButton);
+        hBox3.getChildren().addAll(infoLabel, executeButton, openPathButton, cancelButton);
 
         hBox1.setPadding(new Insets(20, 20, 10, 20));
         hBox1.setAlignment(Pos.CENTER_LEFT);
@@ -76,7 +100,10 @@ public class Main extends Application {
         primaryStage.setTitle("LeetCode template");
         var image = new Image("LeetCodeIcon.png");
         primaryStage.getIcons().add(image);
-        primaryStage.setScene(new Scene(vBox, 400, 240));
+
+        Scene scene = new Scene(vBox, 430, 240);
+        scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
