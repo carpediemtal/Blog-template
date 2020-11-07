@@ -1,5 +1,6 @@
 package sample;
 
+import groovy.lang.GroovyShell;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
@@ -15,14 +17,16 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.awt.*;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
 
-public class Main extends Application {
+public class Template extends Application {
+    private static final GroovyShell shell = new GroovyShell();
+    private static final Set<KeyCode> set = new HashSet<>();
 
     @Override
     public void start(Stage primaryStage) {
@@ -44,11 +48,20 @@ public class Main extends Application {
         TextField pathTextField = new TextField("C:\\Users\\67460\\Documents\\blog\\source\\_posts");
         pathTextField.setMinWidth(250);
         Button browseButton = new Button("Browse");
-        browseButton.setOnAction(actionEvent -> pathTextField.setText(chooseDirectory(primaryStage).toString()));
+        Label infoLabel = new Label();
+        browseButton.setOnAction(actionEvent -> {
+            File dir = chooseDirectory(primaryStage);
+            if (dir == null) {
+                infoLabel.setText("no directory has been chosen");
+                infoLabel.setVisible(true);
+            } else {
+                pathTextField.setText(chooseDirectory(primaryStage).toString());
+            }
+        });
         browseButton.getStyleClass().addAll("btn", "btn-outline-primary");
 
         /*  HBox-3  */
-        Label infoLabel = new Label();
+//        Label infoLabel = new Label();
         // Set red color for info label
         infoLabel.setTextFill(Paint.valueOf("#FF0000"));
         infoLabel.getStyleClass().addAll("lbl", "lbl-warning");
@@ -62,9 +75,7 @@ public class Main extends Application {
                 } else {
                     infoLabel.setText("The file has already existed!");
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }finally {
+            } finally {
                 infoLabel.setVisible(true);
             }
         });
@@ -77,7 +88,7 @@ public class Main extends Application {
             } catch (IOException e) {
                 infoLabel.setText("Open path failed");
                 e.printStackTrace();
-            }finally {
+            } finally {
                 infoLabel.setVisible(true);
             }
         });
@@ -101,12 +112,29 @@ public class Main extends Application {
         var image = new Image("LeetCodeIcon.png");
         primaryStage.getIcons().add(image);
 
+
         Scene scene = new Scene(vBox, 430, 240);
+        scene.setOnKeyPressed(keyEvent -> {
+            var key = keyEvent.getCode();
+            set.add(key);
+            if (key == KeyCode.ESCAPE) {
+                cancelButton.fire();
+            }
+            if (set.contains(KeyCode.ALT)) {
+                switch (key) {
+                    case B -> browseButton.fire();
+                    case E -> executeButton.fire();
+                    case O -> openPathButton.fire();
+                }
+            }
+        });
+        scene.setOnKeyReleased(keyEvent -> set.remove(keyEvent.getCode()));
         scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
 
     public static void main(String[] args) {
         launch(args);
@@ -115,9 +143,8 @@ public class Main extends Application {
     /**
      * @param name file name such as LeetCode-233
      * @return return true if the file is created successfully and false if the file has already existed
-     * @throws IOException the operation to file may cause IOException
      */
-    private static boolean createTemplate(String path, String name) throws IOException {
+    private static boolean createTemplate(String path, String name) {
         File file = new File(path + "/" + name + ".md");
         if (file.exists()) {
             return false;
@@ -155,9 +182,17 @@ public class Main extends Application {
                 """, name, date);
 
         // Write the content to the file
+        /* groovy version */
+        shell.setVariable("file", file);
+        shell.setVariable("content", content);
+        shell.evaluate("file << content");
+
+        /* java version */
+        /*
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
         writer.write(content);
         writer.flush();
+        */
         return true;
     }
 
