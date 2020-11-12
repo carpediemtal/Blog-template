@@ -1,3 +1,0 @@
-eternal/fire/Main.java
- eternal.fire.Main
- eternal.fire.Main$1
