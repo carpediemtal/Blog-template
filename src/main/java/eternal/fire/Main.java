@@ -1,6 +1,8 @@
 package eternal.fire;
 
 import com.jfoenix.controls.*;
+import eternal.fire.utils.BracketsTransform;
+import eternal.fire.utils.LinkedListTransform;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -34,7 +36,7 @@ public class Main extends Application {
 
     private Label fileNameLabel;
     private JFXTextField fileNameInput;
-    private JFXButton utilButton;
+    private JFXButton utilBtn;
 
     private Label pathLabel;
     private JFXTextField pathInput;
@@ -122,26 +124,29 @@ public class Main extends Application {
         utils.setRotate(-90);
         utils.setSpacing(28);
 
-        JFXButton bracketsButton = new JFXButton("Brackets");
-        bracketsButton.setStyle("-fx-background-color: lightgreen;-fx-background-radius: 60px;-jfx-button-type: RAISED;-fx-pref-width: 70px;-fx-pref-height: 40px;-fx-font-size: 10px;");
-        JFXButton treeViewButton = new JFXButton("TreeView");
-        treeViewButton.setStyle("-fx-background-color: lightgreen;-fx-background-radius: 60px;-jfx-button-type: RAISED;-fx-pref-width: 70px;-fx-pref-height: 40px;-fx-font-size: 10px;");
-        JFXButton listViewButton = new JFXButton("ListView");
-        listViewButton.setStyle("-fx-background-color: lightgreen;-fx-background-radius: 60px;-jfx-button-type: RAISED;-fx-pref-width: 70px;-fx-pref-height: 40px;-fx-font-size: 10px;");
+        JFXButton bracketsBtn = new JFXButton("Brackets");
+        bracketsBtn.setStyle("-fx-background-color: lightgreen;-fx-background-radius: 60px;-jfx-button-type: RAISED;-fx-pref-width: 70px;-fx-pref-height: 40px;-fx-font-size: 10px;");
+        JFXButton treeViewBtn = new JFXButton("TreeView");
+        treeViewBtn.setStyle("-fx-background-color: lightgreen;-fx-background-radius: 60px;-jfx-button-type: RAISED;-fx-pref-width: 70px;-fx-pref-height: 40px;-fx-font-size: 10px;");
+        JFXButton linkedListBtn = new JFXButton("LinkedList");
+        linkedListBtn.setStyle("-fx-background-color: lightgreen;-fx-background-radius: 60px;-jfx-button-type: RAISED;-fx-pref-width: 70px;-fx-pref-height: 40px;-fx-font-size: 10px;");
 
-        bracketsButton.setOnAction(event->{
-            Brackets.showStage();
+        bracketsBtn.setOnAction(event->{
+            BracketsTransform.showStage();
+        });
+        linkedListBtn.setOnAction(event -> {
+            LinkedListTransform.showStage();
         });
 
-        utilButton = new JFXButton("Utils");
-        utilButton.getStyleClass().add("main-button");
-        utilButton.setStyle("-fx-pref-width: 40px;-fx-pref-height: 40px;-fx-font-size: 10px;-fx-background-color: #629755;");
-        utilButton.setTextFill(Color.WHITE);
+        utilBtn = new JFXButton("Utils");
+        utilBtn.getStyleClass().add("main-button");
+        utilBtn.setStyle("-fx-pref-width: 40px;-fx-pref-height: 40px;-fx-font-size: 10px;-fx-background-color: #629755;");
+        utilBtn.setTextFill(Color.WHITE);
 
-        utils.addAnimatedNode(utilButton);
-        utils.addAnimatedNode(bracketsButton);
-        utils.addAnimatedNode(treeViewButton);
-        utils.addAnimatedNode(listViewButton);
+        utils.addAnimatedNode(utilBtn);
+        utils.addAnimatedNode(bracketsBtn);
+        utils.addAnimatedNode(treeViewBtn);
+        utils.addAnimatedNode(linkedListBtn);
 
         hBox1 = new HBox();
         hBox1.setSpacing(20);
