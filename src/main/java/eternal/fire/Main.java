@@ -1,9 +1,6 @@
 package eternal.fire;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -30,62 +27,66 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Main extends Application {
-    private static final Set<KeyCode> set = new HashSet<>();
+    private static final Set<KeyCode> SET = new HashSet<>();
+
+    private Stage primaryStage;
+    private Scene scene;
+
+    private Label fileNameLabel;
+    private JFXTextField fileNameInput;
+    private JFXButton utilButton;
+
+    private Label pathLabel;
+    private JFXTextField pathInput;
+
+    private JFXButton browseButton;
+    private JFXButton openPathButton;
+    private JFXButton executeButton;
+    private JFXButton exitButton;
+
+    private Text dialogHeadText;
+    private Text dialogBodyText;
+    private JFXDialog jfxDialog;
+
+    private StackPane stackPane;
+    private VBox vBox;
+    private HBox hBox1;
+    private HBox hBox2;
+    private FlowPane flowPane3;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        /* stackPane-->vBox-->(hBox1, hBox2, flowPane3) */
-        StackPane stackPane = new StackPane();
+    public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+        setStackPane();
+        setScene();
+        setPrimaryStage();
+        primaryStage.show();
+    }
 
-        VBox vBox = new VBox();
-        vBox.setSpacing(20);
+    private void setStackPane() {
+        setVBox();
+        setDialogBodyVBox();
+        stackPane = new StackPane();
+        stackPane.getChildren().add(vBox);
+    }
+
+    private void setVBox() {
+        setHBox1();
+        setHBox2();
+        setFlowPane3();
+
+        vBox = new VBox();
+        vBox.setSpacing(15);
         vBox.setPadding(new Insets(15));
+        vBox.getChildren().addAll(hBox1, hBox2, flowPane3);
+    }
 
-        HBox hBox1 = new HBox();
-        hBox1.setSpacing(20);
-        hBox1.setPadding(new Insets(15));
-
-        HBox hBox2 = new HBox();
-        hBox2.setSpacing(60);
-        hBox2.setPadding(new Insets(15));
-
-        FlowPane flowPane3 = new FlowPane();
-        flowPane3.setPadding(new Insets(20));
-        flowPane3.setHgap(10);
-        flowPane3.setVgap(10);
-
-
-        /*--------------------------------------*/
-        Label fileNameLabel = new Label("File Name");
-        fileNameLabel.setFont(Font.font("Consolas", 15));
-        JFXTextField fileNameInput = new JFXTextField("LeetCode");
-        fileNameInput.setPrefWidth(100);
-
-        /*--------------------------------------*/
-        Label pathLabel = new Label("Path");
-        pathLabel.setFont(Font.font("Consolas", 15));
-        JFXTextField pathInput = new JFXTextField("C:\\Users\\67460\\Documents\\blog\\source\\_posts");
-        pathInput.setPrefWidth(300);
-
-        /*--------------------------------------*/
-        JFXButton browseButton = new JFXButton("Browse");
-        browseButton.getStyleClass().add("button-raised");
-        JFXButton openPathButton = new JFXButton("Open Path");
-        openPathButton.getStyleClass().add("button-raised");
-        openPathButton.setStyle("-fx-background-color: #1A91DA");
-        JFXButton executeButton = new JFXButton("Execute");
-        executeButton.getStyleClass().add("button-raised");
-        executeButton.setStyle("-fx-background-color: #0F9D58");
-        JFXButton exitButton = new JFXButton("Exit");
-        exitButton.getStyleClass().add("button-raised");
-        exitButton.setStyle("-fx-background-color: rgb(113, 118, 114);");
-
-
-        /* Dialog: stackPane-->(head-->{HBox}, body-->{VBox-->(HBox,null)) */
-        Text dialogHeadText = new Text();
-        Text dialogBodyText = new Text();
+    private void setDialogBodyVBox() {
         JFXButton acceptButton = new JFXButton("Accept");
         acceptButton.setTextFill(Color.BLUE);
+
+        dialogHeadText = new Text();
+        dialogBodyText = new Text();
 
         HBox dialogHeaderHBox = new HBox();
         dialogHeaderHBox.setAlignment(Pos.CENTER);
@@ -99,14 +100,83 @@ public class Main extends Application {
         dialogBodyTextHBox.getChildren().add(dialogBodyText);
         dialogBodyVBox.getChildren().addAll(dialogBodyTextHBox, acceptButton);
 
-        JFXDialog jfxDialog = new JFXDialog();
+        jfxDialog = new JFXDialog();
         JFXDialogLayout dialogLayout = new JFXDialogLayout();
         dialogLayout.setHeading(dialogHeaderHBox);
         dialogLayout.setBody(dialogBodyVBox);
         dialogLayout.setAlignment(Pos.CENTER);
         jfxDialog.setContent(dialogLayout);
         acceptButton.setOnAction(event -> jfxDialog.close());
+    }
 
+    private void setHBox1() {
+        fileNameLabel = new Label("File Name");
+        fileNameLabel.setFont(Font.font("Consolas", 15));
+        HBox.setMargin(fileNameLabel, new Insets(20, 0, 0, 0));
+
+        fileNameInput = new JFXTextField("LeetCode");
+        fileNameInput.setPrefWidth(100);
+        HBox.setMargin(fileNameInput, new Insets(20, 0, 0, 0));
+
+        JFXNodesList utils = new JFXNodesList();
+        utils.setRotate(-90);
+        utils.setSpacing(28);
+
+        JFXButton bracketsButton = new JFXButton("Brackets");
+        bracketsButton.setStyle("-fx-background-color: lightgreen;-fx-background-radius: 60px;-jfx-button-type: RAISED;-fx-pref-width: 70px;-fx-pref-height: 40px;-fx-font-size: 10px;");
+        JFXButton treeViewButton = new JFXButton("TreeView");
+        treeViewButton.setStyle("-fx-background-color: lightgreen;-fx-background-radius: 60px;-jfx-button-type: RAISED;-fx-pref-width: 70px;-fx-pref-height: 40px;-fx-font-size: 10px;");
+        JFXButton listViewButton = new JFXButton("ListView");
+        listViewButton.setStyle("-fx-background-color: lightgreen;-fx-background-radius: 60px;-jfx-button-type: RAISED;-fx-pref-width: 70px;-fx-pref-height: 40px;-fx-font-size: 10px;");
+
+        bracketsButton.setOnAction(event->{
+            Brackets.showStage();
+        });
+
+        utilButton = new JFXButton("Utils");
+        utilButton.getStyleClass().add("main-button");
+        utilButton.setStyle("-fx-pref-width: 40px;-fx-pref-height: 40px;-fx-font-size: 10px;-fx-background-color: #629755;");
+        utilButton.setTextFill(Color.WHITE);
+
+        utils.addAnimatedNode(utilButton);
+        utils.addAnimatedNode(bracketsButton);
+        utils.addAnimatedNode(treeViewButton);
+        utils.addAnimatedNode(listViewButton);
+
+        hBox1 = new HBox();
+        hBox1.setSpacing(20);
+        hBox1.setPadding(new Insets(15));
+        hBox1.getChildren().addAll(fileNameLabel, fileNameInput, utils);
+    }
+
+    private void setHBox2() {
+        pathLabel = new Label("Path");
+        pathLabel.setFont(Font.font("Consolas", 15));
+
+        pathInput = new JFXTextField("C:\\Users\\67460\\Documents\\blog\\source\\_posts");
+        pathInput.setPrefWidth(300);
+
+        hBox2 = new HBox();
+        hBox2.setSpacing(60);
+        hBox2.setPadding(new Insets(15));
+        hBox2.getChildren().addAll(pathLabel, pathInput);
+    }
+
+    private void setFlowPane3() {
+        browseButton = new JFXButton("Browse");
+        browseButton.getStyleClass().add("button-raised");
+
+        openPathButton = new JFXButton("Open Path");
+        openPathButton.getStyleClass().add("button-raised");
+        openPathButton.setStyle("-fx-background-color: #1A91DA");
+
+        executeButton = new JFXButton("Execute");
+        executeButton.getStyleClass().add("button-raised");
+        executeButton.setStyle("-fx-background-color: #0F9D58");
+
+        exitButton = new JFXButton("Exit");
+        exitButton.getStyleClass().add("button-raised");
+        exitButton.setStyle("-fx-background-color: rgb(113, 118, 114);");
 
         /*--------------------------------------*/
         openPathButton.setOnAction(event -> {
@@ -143,24 +213,23 @@ public class Main extends Application {
         });
         exitButton.setOnAction(event -> primaryStage.close());
 
-
-        /*--------------------------------------*/
-        hBox1.getChildren().addAll(fileNameLabel, fileNameInput);
-        hBox2.getChildren().addAll(pathLabel, pathInput);
+        flowPane3 = new FlowPane();
+        flowPane3.setPadding(new Insets(20));
+        flowPane3.setHgap(10);
+        flowPane3.setVgap(10);
         flowPane3.getChildren().addAll(openPathButton, browseButton, executeButton, exitButton);
-        vBox.getChildren().addAll(hBox1, hBox2, flowPane3);
-        stackPane.getChildren().add(vBox);
+    }
 
-        /*--------------------------------------*/
-        Scene scene = new Scene(stackPane, 500, 300);
+    private void setScene() {
+        scene = new Scene(stackPane, 500, 300);
         scene.getStylesheets().add(Main.class.getResource("/css/jfoenix-components.css").toExternalForm());
         scene.setOnKeyPressed(keyEvent -> {
             KeyCode key = keyEvent.getCode();
-            set.add(key);
+            SET.add(key);
             if (key == KeyCode.ESCAPE) {
                 exitButton.fire();
             }
-            if (set.contains(KeyCode.ALT)) {
+            if (SET.contains(KeyCode.ALT)) {
                 switch (key) {
                     case B -> browseButton.fire();
                     case E -> executeButton.fire();
@@ -168,11 +237,12 @@ public class Main extends Application {
                 }
             }
         });
-
         primaryStage.setScene(scene);
+    }
+
+    private void setPrimaryStage() {
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/LeetCodeIcon.png")));
         primaryStage.setTitle("LeetCode Template");
-        primaryStage.show();
     }
 
     /**
@@ -203,9 +273,10 @@ public class Main extends Application {
         content = content.replaceFirst("%s", name);
         content = content.replaceFirst("%s", date);
 
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8));
-        writer.write(content);
-        writer.flush();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
+            writer.write(content);
+            writer.flush();
+        }
         return true;
     }
 

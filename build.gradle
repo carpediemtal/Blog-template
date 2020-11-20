@@ -1,5 +1,4 @@
 plugins {
-    id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.8'
 }
@@ -8,23 +7,23 @@ group 'eternal.fire'
 version '2.0-SNAPSHOT'
 
 repositories {
-//    mavenCentral()
     maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
     maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
     compile 'com.jfoenix:jfoenix:9.0.10'
 }
 
 javafx {
     version = "13"
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
+    modules = ['javafx.controls', 'javafx.fxml']
 }
-
-mainClassName='eternal.fire.Main'
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
+}
+
+application {
+    mainClass = 'eternal.fire.Main'
 }
