@@ -3,6 +3,7 @@ package eternal.fire;
 import com.jfoenix.controls.*;
 import eternal.fire.utils.BracketsTransform;
 import eternal.fire.utils.LinkedListTransform;
+import eternal.fire.utils.TreeTransform;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -131,12 +132,9 @@ public class Main extends Application {
         JFXButton linkedListBtn = new JFXButton("LinkedList");
         linkedListBtn.setStyle("-fx-background-color: lightgreen;-fx-background-radius: 60px;-jfx-button-type: RAISED;-fx-pref-width: 70px;-fx-pref-height: 40px;-fx-font-size: 10px;");
 
-        bracketsBtn.setOnAction(event->{
-            BracketsTransform.showStage();
-        });
-        linkedListBtn.setOnAction(event -> {
-            LinkedListTransform.showStage();
-        });
+        bracketsBtn.setOnAction(event-> BracketsTransform.showStage());
+        linkedListBtn.setOnAction(event -> LinkedListTransform.showStage());
+        treeViewBtn.setOnAction(event -> TreeTransform.showStage());
 
         utilBtn = new JFXButton("Utils");
         utilBtn.getStyleClass().add("main-button");
